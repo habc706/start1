@@ -5,8 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9012b1dc-eebd-4b82-a0bd-33289fdf1f89" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aliyun_oss/src/main/resources/application.properties" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/shiro_boot/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/shiro_boot/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -161,7 +159,7 @@
       <workItem from="1663807621871" duration="165000" />
       <workItem from="1663827363193" duration="6164000" />
       <workItem from="1663933426607" duration="6770000" />
-      <workItem from="1664003238656" duration="7846000" />
+      <workItem from="1664003238656" duration="8156000" />
     </task>
     <servers />
   </component>
