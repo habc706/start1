@@ -40,7 +40,7 @@ public class TestCon{
     UserMapper userMapper;
 
 
-    
+
     @PostMapping("/t") public Res tea( String user){
      //   log.error("测试goods信息"+goods.getGood_owner()+"名称"+goods.getGood_name());
         log.error("用户信息ss"+user);

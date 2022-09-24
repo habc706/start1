@@ -1,3 +1,4 @@
 aliyun_oss/src/main/resources/application.properties
 .idea
 start.iml
+*.properties
