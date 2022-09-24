@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/aliyun_oss/aliyun_oss.iml" filepath="$PROJECT_DIR$/aliyun_oss/aliyun_oss.iml" />
+      <module fileurl="file://$PROJECT_DIR$/response/response.iml" filepath="$PROJECT_DIR$/response/response.iml" />
+      <module fileurl="file://$PROJECT_DIR$/shiro_boot/shiro_boot.iml" filepath="$PROJECT_DIR$/shiro_boot/shiro_boot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/shrio/shrio.iml" filepath="$PROJECT_DIR$/shrio/shrio.iml" />
+      <module fileurl="file://$PROJECT_DIR$/start.iml" filepath="$PROJECT_DIR$/start.iml" />
+    </modules>
+  </component>
+</project>

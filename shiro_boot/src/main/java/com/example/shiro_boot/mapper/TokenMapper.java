@@ -2,6 +2,7 @@ package com.example.shiro_boot.mapper;
 
 import com.example.shiro_boot.pojo.Token;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 public interface TokenMapper {
@@ -17,5 +18,9 @@ public interface TokenMapper {
             "expiration_time=#{expiration_time} where uuid=#{uuid}")
     public int change_token(Token token);
 
+    @Select("select token from token where uuid=#{uuid}")
+    public String query_token(String  uuid);
 
+    @Select("select uuid from token where token=#{token}")
+    public String query_uuid(String  token);
 }

@@ -1,22 +1,16 @@
 package com.example.shiro_boot;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 @SpringBootTest
+@Slf4j
 class ShiroBootApplicationTests {
 
     @Test
     void contextLoads() {
-        Date date = new Date();
-        long datetime =  date.getTime();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
-        String str = sdf.format(datetime);
-        System.out.println(str);
+
     }
 
 }

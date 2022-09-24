@@ -5,10 +5,11 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-public interface UserMapper {
+public interface
+UserMapper {
 
-    @Insert("insert into user (uuid,address,contact,name) values (" +
-            "#{uuid},#{address},#{contact},#{name})")
+    @Insert("insert into user (uuid,name,password,email,active_code) values (" +
+            "#{uuid},#{name},#{password},#{email},#{active_code})")
     public int add_user(User user);
 
     //更新操作
@@ -19,5 +20,16 @@ public interface UserMapper {
     //返回个人详细信息
     @Select("select * from user where uuid=#{id}")
     public User query_by_id(String id);
+
+
+    @Select("select active_code from user where email=#{email}")
+    public Integer query_active(String  email);
+
+    @Update("update user set activation=true where email=#{email}")
+    public int active(String email);
+
+    @Select("select activation from user where email=#{email}")
+    public boolean if_active(String  email);
+
 
 }

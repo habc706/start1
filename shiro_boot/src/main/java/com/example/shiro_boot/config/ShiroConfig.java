@@ -1,5 +1,6 @@
 package com.example.shiro_boot.config;
 
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,10 +21,11 @@ public class ShiroConfig {
         filtermap.put("/","anon");
         filtermap.put("/a","authc");
         filtermap.put("/a2","authc");
+        filtermap.put("/good/*","authc");
         filtermap.put("/needa","perms[auth1]");
         filtermap.put("/api.v1","authc");
         bean.setFilterChainDefinitionMap(filtermap);
-        bean.setLoginUrl("/login");
+        bean.setLoginUrl("/login/login");
 
         bean.setUnauthorizedUrl("/unauthor");
 
@@ -43,3 +45,4 @@ public class ShiroConfig {
     }
 
 }
+
