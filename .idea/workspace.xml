@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9012b1dc-eebd-4b82-a0bd-33289fdf1f89" name="Default Changelist" comment="" />
+    <list default="true" id="9012b1dc-eebd-4b82-a0bd-33289fdf1f89" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aliyun_oss/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/shiro_boot/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/shiro_boot/src/main/resources/application.properties" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -67,7 +71,7 @@
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
-  <component name="RunManager" selected="Spring Boot.ShiroBootApplication">
+  <component name="RunManager" selected="Spring Boot.AliyunOss">
     <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
@@ -117,9 +121,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Spring Boot.AliyunOss" />
         <item itemvalue="Spring Boot.ShiroBootApplication" />
         <item itemvalue="JUnit.ShiroBootApplicationTests.contextLoads" />
-        <item itemvalue="Spring Boot.AliyunOss" />
       </list>
     </recent_temporary>
   </component>
@@ -157,7 +161,7 @@
       <workItem from="1663807621871" duration="165000" />
       <workItem from="1663827363193" duration="6164000" />
       <workItem from="1663933426607" duration="6770000" />
-      <workItem from="1664003238656" duration="6957000" />
+      <workItem from="1664003238656" duration="7846000" />
     </task>
     <servers />
   </component>
