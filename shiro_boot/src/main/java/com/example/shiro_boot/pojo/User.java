@@ -1,6 +1,8 @@
 package com.example.shiro_boot.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -14,15 +16,6 @@ public class User {
     private Date create_date;
     private boolean activation;
     private Integer active_code;
-    public User(String uuid,String name,String password,String email,Integer active_code){
-        this.uuid=uuid;
-        this.name=name;
-        this.password=password;
-        this.email=email;
-        this.active_code=active_code;
-    }
-    public User(){
-    }
-
-
+    private String icon_url;
+    private String personality;
 }

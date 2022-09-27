@@ -8,7 +8,8 @@ import com.example.shiro_boot.pojo.User;
 import com.example.shiro_boot.pojo.vo.LoginRes;
 import com.example.shiro_boot.pojo.vo.Login_mid;
 import com.example.shiro_boot.pojo.vo.Logvo;
-import com.example.shiro_boot.pojo.vo.token_vo;
+
+import com.example.shiro_boot.pojo.vo.UserRes;
 import com.example.shiro_boot.utils.MD5Utils;
 import com.example.shiro_boot.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -25,16 +26,18 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.print.DocFlavor;
+import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
 @Slf4j
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class LoginService {
-
+public class LoginServiceiml  {
 
     @Autowired
     LoginMapper loginMapper;
@@ -54,14 +57,6 @@ public class LoginService {
     @Autowired
     RedisUtils redisUtils;
 
-//    public  void sendSimpleMail(String receiveEmail, String subject, String content) {
-//        SimpleMailMessage message = new SimpleMailMessage();
-//        message.setFrom("hktalk@163.com");
-//        message.setTo(receiveEmail);
-//        message.setSubject(subject);
-//        message.setText(content);
-//        javaMailSender.send(message);
-//    }
 
 
     //认证成功，返回信息
@@ -73,6 +68,10 @@ public class LoginService {
             LoginRes loginRes=new LoginRes();
             loginRes.setName(login_mid.getName());
             loginRes.setToken(s);
+            loginRes.setUuid(login_mid.getUuid());
+        UserRes userRes= userMapper.query_user_info(login_mid.getUuid());
+        loginRes.setPersonality(userRes.getPersonality());
+        loginRes.setIcon_url(userRes.getIcon_url());
             //更新token日期或更新token
 
         return loginRes;
@@ -80,12 +79,6 @@ public class LoginService {
 
     }
 
-
-    public boolean have_people(String name){
-
-
-        return true;
-    }
 
 
 
@@ -109,27 +102,29 @@ public class LoginService {
         try {
             //开启事务
 
-            String encryption_pass=MD5Utils.string2MD5(password);
-            //添加到用户表
-            User user=new User(uuid,name,encryption_pass,email,active);
-            userMapper.add_user(user);
-
-            //设置  时间插入token
-            SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");//
             Calendar calendar = Calendar.getInstance();
-            String nowdate = sdf.format(calendar.getTime());
             calendar.add(Calendar.MONTH, 1);
-            String expdate = sdf.format(calendar.getTime());
             //添加到token表
             Token token1 = new Token();
             token1.setToken(token);
             token1.setUuid(uuid);
-            token1.setAdd_time(nowdate);
-            token1.setExpiration_time(expdate);
+            token1.setAdd_time(new Date());
+
+            token1.setExpiration_time(new Date(String.valueOf(calendar.getTime())));
             tokenMapper.add_token(token1);
+
+            String encryption_pass=MD5Utils.string2MD5(password);
+            //添加到用户表  uuid,name,encryption_pass,email,active
+
+            User user=new User();
+            user.setName(name);user.setUuid(uuid);user.setPassword(encryption_pass);user.setEmail(email);
+            user.setCreate_date(new Date());user.setActive_code(active);
+            userMapper.add_user(user);
+
 
             //添加到redis
             redisUtils.setToken(token,uuid);
+
             //事务提交
             dataSourceTransactionManager.commit(transactionStatus);//提交
             return true;
@@ -139,14 +134,13 @@ public class LoginService {
             throw e;
         }catch (RedisConnectionFailureException redisConnectionException){
             log.error("新增用户时redis出错:" + redisConnectionException.getMessage());
+            dataSourceTransactionManager.commit(transactionStatus);//提交
             return true;
         }catch (Exception e){
-            log.error("新增用户时出现意外异常:" + e.getMessage()+"异常类型" +   e.getClass()
-            );
+            log.error("新增用户时出现意外异常:" + e.getMessage()+"异常类型" +   e.getClass());
             dataSourceTransactionManager.rollback(transactionStatus);
             throw e;
         }
-
 
     }
 

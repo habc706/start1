@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 @EnableTransactionManagement
 @MapperScan("com.example.shiro_boot.mapper")
 @SpringBootApplication
+@EnableAsync
 public class ShiroBootApplication{
 
 

@@ -1,11 +1,13 @@
 package com.example.shiro_boot.controller;
 
-import com.example.shiro_boot.Excepiton.NotActiveException;
+
 import com.example.shiro_boot.mapper.LoginMapper;
+import com.example.shiro_boot.mapper.TokenMapper;
 import com.example.shiro_boot.mapper.UserMapper;
+import com.example.shiro_boot.pojo.User;
 import com.example.shiro_boot.pojo.vo.LoginRes;
 import com.example.shiro_boot.pojo.vo.Logvo;
-import com.example.shiro_boot.service.LoginService;
+import com.example.shiro_boot.service.LoginServiceiml;
 import com.example.shiro_boot.utils.Mail;
 import com.guo.res.Res;
 import com.guo.res.ResCode;
@@ -17,10 +19,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
 
 @RestController
 @Slf4j
@@ -29,7 +34,7 @@ public class Login {
 
 
     @Autowired
-    LoginService loginService;
+    LoginServiceiml loginService;
 
     @Autowired
     RedisTemplate redisTemplate;
@@ -42,6 +47,9 @@ public class Login {
 
     @Autowired
     private LoginMapper loginMapper;
+
+    @Autowired
+    private TokenMapper tokenMapper;
 
 
 //登陆并返回token
@@ -84,9 +92,15 @@ public class Login {
         //根据昵称密码返回是否正确
 
         LoginRes jud = loginService.logn(logvo);
-        //redisTemplate.getExpire();
+        HashMap<String ,Object> hashMap=new HashMap<>();
+        hashMap.put("name",jud.getName());
+        hashMap.put("uuid",jud.getUuid());
+        hashMap.put("token",jud.getUuid());
+        hashMap.put("icon",jud.getIcon_url());
+        hashMap.put("personality",jud.getPersonality());
 
-        return Res.ok().data("data",jud);
+
+        return Res.ok().data(hashMap);
 
 
     }
@@ -129,12 +143,17 @@ public class Login {
         }
 
         //根据昵称密码返回是否正确
-
         LoginRes jud = loginService.logn(logvo);
-        //redisTemplate.getExpire();
+        HashMap<String ,Object> hashMap=new HashMap<>();
+        hashMap.put("name",jud.getName());
+        hashMap.put("uuid",jud.getUuid());
+        hashMap.put("token",jud.getUuid());
+        hashMap.put("icon",jud.getIcon_url());
+        hashMap.put("personality",jud.getPersonality());
 
-        return Res.ok().data("data",jud);
+        return Res.ok().data(hashMap);
     }
+
 
     @PostMapping("/register")  //注册成功后返回成功
     public Res register(String email,String name,String password){
@@ -143,9 +162,7 @@ public class Login {
         if (loginService.register(email,name,password)){
             //发邮箱，写注册码
             int code= userMapper.query_active(email);
-
             mail.sendMail(email,"您的hktalk验证码","您的验证码是："+code);
-
             return Res.ok().setMessage("注册成功，请查看邮箱验证码激活");
         }
 

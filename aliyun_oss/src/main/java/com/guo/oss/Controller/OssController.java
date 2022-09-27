@@ -25,8 +25,6 @@ public class OssController {
         //返回上传到oss的路径
         try {
             String url = ossService.uploadFileAvatar(file);
-
-            System.out.println("okkllll");
             return Res.ok().data("url",url);
         }
         catch (Exception e){

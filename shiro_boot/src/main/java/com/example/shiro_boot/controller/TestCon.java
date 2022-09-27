@@ -1,6 +1,7 @@
 package com.example.shiro_boot.controller;
 
 import com.example.shiro_boot.Excepiton.MyGlobalException;
+import com.example.shiro_boot.mapper.LikeMapper;
 import com.example.shiro_boot.mapper.TokenMapper;
 import com.example.shiro_boot.mapper.UserMapper;
 import com.example.shiro_boot.pojo.User;
@@ -39,6 +40,8 @@ public class TestCon{
     @Autowired
     UserMapper userMapper;
 
+    @Autowired
+    LikeMapper likeMapper;
 
 
     @PostMapping("/t") public Res tea( String user){
@@ -46,9 +49,9 @@ public class TestCon{
         log.error("用户信息ss"+user);
         try {
 
-            User i1 = userMapper.query_by_id(user);
+         //   User i1 = userMapper.query_by_id(user);
 
-            return Res.ok().setMessage("修改成功").data("d",i1);
+            return Res.ok().setMessage("修改成功");
 
 
         }catch (Exception e){
@@ -98,6 +101,16 @@ public class TestCon{
 
 
         return Res.ok().setMessage("需要登陆的页面");
+
+    }
+
+    @GetMapping("/aea")
+    public Res dossss(){
+
+        //   redisTemplate.opsForValue().set("teas",se);
+
+
+        return Res.ok().data("if",likeMapper.quert_like("sa","luanlai"));
 
     }
 

@@ -5,7 +5,7 @@ import com.example.shiro_boot.mapper.LoginMapper;
 import com.example.shiro_boot.mapper.TokenMapper;
 import com.example.shiro_boot.mapper.UserMapper;
 import com.example.shiro_boot.pojo.vo.Login_mid;
-import com.example.shiro_boot.pojo.vo.token_vo;
+
 import com.example.shiro_boot.utils.MD5Utils;
 import com.example.shiro_boot.utils.RedisUtils;
 import lombok.SneakyThrows;
