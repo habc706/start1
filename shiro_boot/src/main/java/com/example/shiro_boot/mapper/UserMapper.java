@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.util.Date;
+
 public interface
 UserMapper {
 
@@ -38,4 +40,7 @@ UserMapper {
 
     @Select("select name from user where uuid=#{uuid}")
     public String query_name(String uuid);
+
+    @Select("select create_date from `user` where uuid=#{uuid}")
+    public Date query_date(String uuid);
 }

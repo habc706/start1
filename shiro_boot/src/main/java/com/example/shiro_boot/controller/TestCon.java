@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Date;
 //import static com.example.shiro_boot.utils.Mail.sendSimpleMail;
 
 
@@ -108,9 +109,15 @@ public class TestCon{
     public Res dossss(){
 
         //   redisTemplate.opsForValue().set("teas",se);
-
-
-        return Res.ok().data("if",likeMapper.quert_like("sa","luanlai"));
+        String a=null;
+        Date date = userMapper.query_date("201e792d-28fb-4c2b-b1c3-4a80056465f7");
+        Date date1 = userMapper.query_date("408ae128-6464-4686-b1f5-2ab5344a506b");
+        if (date.compareTo(date1)<0){ //date更前面
+             a="yes";
+        }else {
+             a="no";
+        }
+        return Res.ok().data("if",date).data("date2",date1).data("yes/not",a);
 
     }
 
