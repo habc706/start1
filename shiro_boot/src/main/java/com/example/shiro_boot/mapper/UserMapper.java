@@ -20,7 +20,7 @@ UserMapper {
     public Integer change_user_info(@Param("uuid") String uuid,@Param("name") String name,@Param("personality") String personality);
 
     //返回个人详细信息
-    @Update("update user set icon=#{icon} where uuid=#{id}")
+    @Update("update user set icon_url=#{icon} where uuid=#{id}")
     public Integer update_icon(@Param("id") String id,@Param("icon") String icon);
 
     //------------------------

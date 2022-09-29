@@ -2,19 +2,21 @@ package com.example.shiro_boot.controller;
 
 import com.example.shiro_boot.Excepiton.ExpiraExcetion;
 import com.example.shiro_boot.mapper.UserMapper;
-import com.example.shiro_boot.pojo.User;
 import com.example.shiro_boot.pojo.vo.UserRes;
 import com.example.shiro_boot.utils.RedisUtils;
 import com.guo.res.Res;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -56,11 +58,21 @@ public class UserController {
     public Res change_icon(MultipartFile file,String token){
         MultiValueMap<String, Object> params = new LinkedMultiValueMap<>(1);
         String uuid=redisUtils.getUuid(token);
-        params.add("file",file);
-        Res res = restTemplate.postForObject("http://localhost:8002/eduoss/fileoss", params,Res.class);
-        if (res.getCode()==200){
 
+        String  url="http://localhost:8002/eduoss/fileoss";
+        Resource resource = new ByteArrayResource(file.getBytes()){ //file为接受的MultipartFile参数
+            @Override
+            public String getFilename() {
+                return file.getOriginalFilename();
+            }
+        };
+
+        params.add("file",resource);
+        Res res = restTemplate.postForObject(url, params, Res.class);
+
+        if (Objects.requireNonNull(res).getCode()==200){
             String icon= (String) res.getData().get("url");
+
             userMapper.update_icon(uuid,icon);
             return Res.ok().setMessage("上传成功");
 

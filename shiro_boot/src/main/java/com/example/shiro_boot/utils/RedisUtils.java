@@ -2,6 +2,7 @@ package com.example.shiro_boot.utils;
 import com.example.shiro_boot.Excepiton.ExpiraExcetion;
 import com.example.shiro_boot.mapper.TokenMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -19,19 +20,31 @@ import java.util.concurrent.TimeUnit;
         TokenMapper tokenMapper;
 
         public String getUuid(String token) throws ExpiraExcetion {
-            String res= (String) redisTemplate.opsForValue().get(token);
-            if (res==null){
-                //查询数据库有没有，没有就抛出异常
+
+            try {
+                String res= (String) redisTemplate.opsForValue().get(token);
+                if (res==null){
+                    //查询数据库有没有，没有就抛出异常
+                    String uuid = tokenMapper.query_uuid(token);
+                    if (uuid!=null){
+                        redisTemplate.opsForValue().set(token,uuid,48, TimeUnit.HOURS);
+                        return uuid;
+                    }else {
+                        throw new ExpiraExcetion("没有这样的token");
+                    }
+
+                }
+                return res;
+            }catch (RedisConnectionFailureException redisConnectionFailureException){
                 String uuid = tokenMapper.query_uuid(token);
                 if (uuid!=null){
-                    redisTemplate.opsForValue().set(token,uuid,48, TimeUnit.HOURS);
+//                    redisTemplate.opsForValue().set(token,uuid,48, TimeUnit.HOURS);
                     return uuid;
                 }else {
                     throw new ExpiraExcetion("没有这样的token");
                 }
 
             }
-            return res;
 
         }
 

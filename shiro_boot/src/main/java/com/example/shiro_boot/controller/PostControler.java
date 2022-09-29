@@ -61,8 +61,8 @@ public class PostControler {
 
 
     @PostMapping("/my_posts")
-    public Res my_post(String  token) throws ExpiraExcetion {
-        String uuid=redisUtils.getUuid(token);
+    public Res my_post(String  uuid) throws ExpiraExcetion {
+
 
         return Res.ok().data("posts",postMapper.query_my_posts(uuid));
     }
@@ -70,7 +70,11 @@ public class PostControler {
     @PostMapping("/delete")
     public Res delete(String postid,String token) throws ExpiraExcetion {
         String uuid=redisUtils.getUuid(token);
-        int a= postMapper.delete(postid,uuid);
+        String real_user=postMapper.whos_post(postid);
+        if (!uuid.equals(real_user))
+            return Res.fail().setMessage("身份不匹配，没有权利删除");
+
+        int a= postMapper.delete(postid);
         if (a==1)
             return Res.ok().setMessage("删除成功");
         else

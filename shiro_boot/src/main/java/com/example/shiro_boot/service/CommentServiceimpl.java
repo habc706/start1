@@ -1,8 +1,10 @@
 package com.example.shiro_boot.service;
 
 import com.example.shiro_boot.mapper.CommentMapper;
+import com.example.shiro_boot.mapper.UserMapper;
 import com.example.shiro_boot.pojo.Comments;
 
+import com.example.shiro_boot.pojo.vo.CommentRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,9 @@ import java.util.List;
 public class CommentServiceimpl  {
     @Autowired
     CommentMapper commentMapper;
+
+    @Autowired
+    UserMapper userMapper;
 
     public Integer add_comment(String postid, String uuid, String comment) {
         Comments comments=new Comments();
@@ -35,20 +40,16 @@ public class CommentServiceimpl  {
         return integer;
     }
 
-    public List<HashMap<String ,String >> query_comments(String postid) {
-        List<Comments> comments = commentMapper.query_comments(postid);
-        List<HashMap<String ,String >> res=new LinkedList<>();
-
-        for (Comments com:comments
+    public List<CommentRes> query_comments(String postid) {
+        List<CommentRes> comments = commentMapper.query_comments(postid);
+        for (CommentRes c:comments
              ) {
-            HashMap<String ,String> mid=new HashMap<>();
-            mid.put("user",com.getOwner());
-            mid.put("content",com.getContent());
-            mid.put("time",com.getTime()+"");
-            res.add(mid);
+            c.setName(userMapper.query_name(c.getOwner()));
+
         }
 
 
-        return res;
+
+        return comments;
     }
 }
