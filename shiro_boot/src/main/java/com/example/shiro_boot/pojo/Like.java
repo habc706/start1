@@ -1,7 +1,7 @@
 package com.example.shiro_boot.pojo;
 
 public class Like {
-    private String id;
-    private String  owner;
+    private Long id;
+    private Long  owner;
     private boolean islike;
 }

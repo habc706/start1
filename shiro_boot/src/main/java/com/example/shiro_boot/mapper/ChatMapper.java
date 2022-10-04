@@ -12,7 +12,7 @@ public interface ChatMapper {
 
     @Insert("insert `chat_record` (id,who,content,date) values (" +
             "#{id},#{who},#{content},#{date})")
-    public Integer add_chat(@Param("id")String id,@Param("who")String who,
+    public Integer add_chat(@Param("id")String id,@Param("who")Long who,
     @Param("content")String content,@Param("date") Date date);
 
     @Select("select content,date,who from `chat_record` where id=#{id}")

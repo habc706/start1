@@ -7,7 +7,6 @@ import com.example.shiro_boot.pojo.vo.UserRes;
 import com.example.shiro_boot.utils.RedisUtils;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -28,9 +27,9 @@ public class LikeServiceimpl  {
 
     //更改喜欢状态，如果没有就插入，有就更改
     @SneakyThrows
-    public Integer change_like(String postid, String token) {
+    public Integer change_like(Long postid, Long token) {
 
-        String uuid=redisUtils.getUuid(token);
+        Long uuid=redisUtils.getUuid(token);
         Boolean b= likeMapper.quert_like(postid,uuid);
 
         if (b==null)
@@ -43,20 +42,20 @@ public class LikeServiceimpl  {
     }
 
 
-    public Integer likenums(String postid) {
+    public Integer likenums(Long postid) {
 
 
         return likeMapper.query_nums(postid);
     }
 
 
-    public HashMap<String, Object> who_likes(String postid) {
+    public HashMap<Object, Object> who_likes(String postid) {
 
-        List<String> idlist=likeMapper.who_likes(postid);
+        List<Long> idlist=likeMapper.who_likes(postid);
         //TODO 根据列表逐个查询,返回token还是uuid？？？
         // id,姓名
-        HashMap<String ,Object>res=new HashMap<>();
-        for (String id
+        HashMap<Object ,Object>res=new HashMap<>();
+        for (Long id
                 :idlist
              ) {
 

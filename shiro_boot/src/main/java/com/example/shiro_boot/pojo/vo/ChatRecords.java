@@ -8,6 +8,6 @@ import java.util.Date;
 public class ChatRecords {
     private String content;
     private Date date;
-    private String who;  //uuid
+    private Long who;  //uuid
 
 }

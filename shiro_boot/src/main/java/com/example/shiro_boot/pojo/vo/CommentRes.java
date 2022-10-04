@@ -7,7 +7,7 @@ import java.util.Date;
 @Data
 public class CommentRes {
     private String content;
-    private String owner;
+    private Long owner;
     private Date time;
     private String name;
 }

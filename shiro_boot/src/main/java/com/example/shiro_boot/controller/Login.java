@@ -92,10 +92,10 @@ public class Login {
         //根据昵称密码返回是否正确
 
         LoginRes jud = loginService.logn(logvo);
-        HashMap<String ,Object> hashMap=new HashMap<>();
+        HashMap<Object ,Object> hashMap=new HashMap<>();
         hashMap.put("name",jud.getName());
         hashMap.put("uuid",jud.getUuid());
-        hashMap.put("token",jud.getUuid());
+        hashMap.put("token",jud.getToken());
         hashMap.put("icon",jud.getIcon_url());
         hashMap.put("personality",jud.getPersonality());
 
@@ -144,10 +144,10 @@ public class Login {
 
         //根据昵称密码返回是否正确
         LoginRes jud = loginService.logn(logvo);
-        HashMap<String ,Object> hashMap=new HashMap<>();
+        HashMap<Object ,Object> hashMap=new HashMap<>();
         hashMap.put("name",jud.getName());
         hashMap.put("uuid",jud.getUuid());
-        hashMap.put("token",jud.getUuid());
+        hashMap.put("token",jud.getToken());
         hashMap.put("icon",jud.getIcon_url());
         hashMap.put("personality",jud.getPersonality());
 

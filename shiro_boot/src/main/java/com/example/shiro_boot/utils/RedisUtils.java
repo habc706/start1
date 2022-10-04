@@ -19,13 +19,13 @@ import java.util.concurrent.TimeUnit;
         @Autowired
         TokenMapper tokenMapper;
 
-        public String getUuid(String token) throws ExpiraExcetion {
+        public Long getUuid(Long token) throws ExpiraExcetion {
 
             try {
-                String res= (String) redisTemplate.opsForValue().get(token);
+                Long res= (Long) redisTemplate.opsForValue().get(token);
                 if (res==null){
                     //查询数据库有没有，没有就抛出异常
-                    String uuid = tokenMapper.query_uuid(token);
+                    Long uuid = tokenMapper.query_uuid(token);
                     if (uuid!=null){
                         redisTemplate.opsForValue().set(token,uuid,48, TimeUnit.HOURS);
                         return uuid;
@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit;
                 }
                 return res;
             }catch (RedisConnectionFailureException redisConnectionFailureException){
-                String uuid = tokenMapper.query_uuid(token);
+                Long uuid = tokenMapper.query_uuid(token);
                 if (uuid!=null){
 //                    redisTemplate.opsForValue().set(token,uuid,48, TimeUnit.HOURS);
                     return uuid;
@@ -48,7 +48,7 @@ import java.util.concurrent.TimeUnit;
 
         }
 
-        public void setToken(String  token,String uuid){
+        public void setToken(Long  token,Long uuid){
 
             redisTemplate.opsForValue().set(token,uuid,48,TimeUnit.HOURS);
         }

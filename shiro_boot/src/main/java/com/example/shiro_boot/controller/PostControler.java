@@ -30,9 +30,9 @@ public class PostControler {
     }
 
     @PostMapping("/write")
-    public Res write_post(String token,String content,String title) throws ExpiraExcetion {
+    public Res write_post(Long token,String content,String title) throws ExpiraExcetion {
 
-        String uuid=redisUtils.getUuid(token);
+        Long uuid=redisUtils.getUuid(token);
         int a= postServiceimpl.write_post(uuid,content,title);
         if (a==1)
             return Res.ok();
@@ -42,9 +42,8 @@ public class PostControler {
 
     //查看某一篇具体信息，标题
     @GetMapping("get/{id}")
-    public Res get_a_post(@PathVariable("id") String id){
+    public Res get_a_post(@PathVariable("id") Long id){
         Post post = postServiceimpl.get_post(id);
-
 
         return Res.ok().data("post",post);
     }
@@ -61,16 +60,15 @@ public class PostControler {
 
 
     @PostMapping("/my_posts")
-    public Res my_post(String  uuid) throws ExpiraExcetion {
-
+    public Res my_post(Long  uuid) {
 
         return Res.ok().data("posts",postMapper.query_my_posts(uuid));
     }
 
     @PostMapping("/delete")
-    public Res delete(String postid,String token) throws ExpiraExcetion {
-        String uuid=redisUtils.getUuid(token);
-        String real_user=postMapper.whos_post(postid);
+    public Res delete(Long postid,Long token) throws ExpiraExcetion {
+        Long uuid=redisUtils.getUuid(token);
+        Long real_user=postMapper.whos_post(postid);
         if (!uuid.equals(real_user))
             return Res.fail().setMessage("身份不匹配，没有权利删除");
 

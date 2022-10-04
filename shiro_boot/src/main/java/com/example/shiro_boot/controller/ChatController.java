@@ -31,31 +31,36 @@ public class ChatController {
     }
 
     @PostMapping("/add_chat")
-    public Res add_chat(String uuid,String token,String content) throws ExpiraExcetion {  //uuid是对方的uuid
-        String myid=redisUtilsl.getUuid(token);
+    public Res add_chat(Long uuid,Long token,String content) throws ExpiraExcetion {  //uuid是对方的uuid
+        Long myid=redisUtilsl.getUuid(token);
         //生成id
         Date date=userMapper.query_date(myid);
         Date date1=userMapper.query_date(uuid);
         String id=null;
+        String myStringid=String.valueOf(myid);
+        String yourStringid=String.valueOf(uuid);
         if (date.compareTo(date1)<0){  //date更早
-            id=myid.substring(0,8)+uuid.substring(0,8);
+
+            id=myStringid.substring(0,8)+yourStringid.substring(0,8)+"";
         }else {
-            id=uuid.substring(0,8)+myid.substring(0,8);
+            id=yourStringid.substring(0,8)+myStringid.substring(0,8)+"";
         }
         chatMapper.add_chat(id,myid,content,new Date());
 
         return Res.ok();
     }
     @PostMapping("/get_chats")
-    public Res get_chats(String uuid,String token) throws ExpiraExcetion {
-        String myid=redisUtilsl.getUuid(token);
+    public Res get_chats(Long uuid,Long token) throws ExpiraExcetion {
+        Long myid=redisUtilsl.getUuid(token);
         Date date=userMapper.query_date(myid);
         Date date1=userMapper.query_date(uuid);
+        String myStringid=String.valueOf(myid);
+        String yourStringid=String.valueOf(uuid);
         String id=null;
         if (date.compareTo(date1)<0){  //date更早
-            id=myid.substring(0,8)+uuid.substring(0,8);
+            id=myStringid.substring(0,8)+yourStringid.substring(0,8);
         }else {
-            id=uuid.substring(0,8)+myid.substring(0,8);
+            id=myStringid.substring(0,8)+yourStringid.substring(0,8);
         }
         List<ChatRecords> chatRecords = chatMapper.query_chat_records(id);
 

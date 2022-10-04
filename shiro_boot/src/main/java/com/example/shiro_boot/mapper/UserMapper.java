@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.javassist.compiler.ast.StringL;
 
 import java.util.Date;
 
@@ -19,15 +20,15 @@ UserMapper {
     //更新操作
     @Update("update user set name=#{name},personality=#{personality} " +
             "where uuid=#{uuid}")
-    public Integer change_user_info(@Param("uuid") String uuid,@Param("name") String name,@Param("personality") String personality);
+    public Integer change_user_info(@Param("uuid") Long uuid,@Param("name") String name,@Param("personality") String personality);
 
     //返回个人详细信息
     @Update("update user set icon_url=#{icon} where uuid=#{id}")
-    public Integer update_icon(@Param("id") String id,@Param("icon") String icon);
+    public Integer update_icon(@Param("id") Long id, @Param("icon") String icon);
 
     //------------------------
     @Select("select name,icon_url,personality from user where uuid=#{uuid}")
-    public UserRes query_user_info(String uuid);
+    public UserRes query_user_info(Long uuid);
 
     @Select("select active_code from user where email=#{email}")
     public Integer query_active(String  email);
@@ -39,8 +40,8 @@ UserMapper {
     public boolean if_active(String  email);
 
     @Select("select name from user where uuid=#{uuid}")
-    public String query_name(String uuid);
+    public String query_name(Long uuid);
 
     @Select("select create_date from `user` where uuid=#{uuid}")
-    public Date query_date(String uuid);
+    public Date query_date(Long uuid);
 }

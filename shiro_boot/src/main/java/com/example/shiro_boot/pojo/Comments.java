@@ -6,8 +6,8 @@ import java.util.Date;
 
 @Data
 public class Comments {
-    private String id;
+    private Long id;
     private String content;
-    private String owner;
+    private Long owner;
     private Date time;
 }

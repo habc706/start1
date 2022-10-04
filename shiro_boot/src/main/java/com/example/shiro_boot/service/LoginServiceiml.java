@@ -12,6 +12,7 @@ import com.example.shiro_boot.pojo.vo.Logvo;
 import com.example.shiro_boot.pojo.vo.UserRes;
 import com.example.shiro_boot.utils.MD5Utils;
 import com.example.shiro_boot.utils.RedisUtils;
+import com.example.shiro_boot.utils.SnowAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -64,7 +65,7 @@ public class LoginServiceiml  {
 
             Login_mid login_mid = loginMapper.query_message(logvo.getEmail());
             //查询token
-            String s = tokenMapper.query_token(login_mid.getUuid());
+            String  s = tokenMapper.query_token(login_mid.getUuid());
             LoginRes loginRes=new LoginRes();
             loginRes.setName(login_mid.getName());
             loginRes.setToken(s);
@@ -91,9 +92,9 @@ public class LoginServiceiml  {
 
         TransactionStatus transactionStatus = dataSourceTransactionManager.getTransaction(transactionDefinition);
 
-        String token = null;
-        token = UUID.randomUUID().toString();
-        String uuid = UUID.randomUUID().toString();
+        Long token = SnowAlgorithm.getid();
+
+        Long uuid = SnowAlgorithm.getid();
 
         int min=1000;
         Random random = new Random();//9000
@@ -107,6 +108,7 @@ public class LoginServiceiml  {
             //添加到token表
             Token token1 = new Token();
             token1.setToken(token);
+
             token1.setUuid(uuid);
             token1.setAdd_time(new Date());
 

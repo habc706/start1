@@ -22,7 +22,7 @@ public class CommentServiceimpl  {
     @Autowired
     UserMapper userMapper;
 
-    public Integer add_comment(String postid, String uuid, String comment) {
+    public Integer add_comment(Long postid, Long uuid, String comment) {
         Comments comments=new Comments();
         comments.setTime(new Date());
         comments.setContent(comment); comments.setId(postid); comments.setOwner(uuid);
@@ -32,7 +32,7 @@ public class CommentServiceimpl  {
     }
 
 
-    public Integer delete_comment(String postid, String uuid, Date date) {
+    public Integer delete_comment(Long postid, Long uuid, Date date) {
         Comments comments=new Comments();
         comments.setOwner(uuid);comments.setId(postid);comments.setTime(date);
         Integer integer = commentMapper.delete_comment(comments);
@@ -40,7 +40,7 @@ public class CommentServiceimpl  {
         return integer;
     }
 
-    public List<CommentRes> query_comments(String postid) {
+    public List<CommentRes> query_comments(Long postid) {
         List<CommentRes> comments = commentMapper.query_comments(postid);
         for (CommentRes c:comments
              ) {

@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Login_mid {
-    private String uuid;
+    private Long uuid;
     private String name;
 }
 

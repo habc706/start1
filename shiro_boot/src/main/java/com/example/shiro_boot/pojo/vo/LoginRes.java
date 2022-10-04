@@ -6,7 +6,7 @@ import lombok.Data;
 public class LoginRes {
     private String token;
     private String name;
-    private String uuid;
+    private Long uuid;
     private String icon_url;
     private String personality;
 

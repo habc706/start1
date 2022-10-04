@@ -8,6 +8,7 @@ import com.example.shiro_boot.pojo.vo.Login_mid;
 
 import com.example.shiro_boot.utils.MD5Utils;
 import com.example.shiro_boot.utils.RedisUtils;
+import com.example.shiro_boot.utils.SnowAlgorithm;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
@@ -71,15 +72,11 @@ public class ShiroRealm extends AuthorizingRealm {
         if (MD5Utils.passwordIsTrue(pas,database_pass)){
             log.error("到了这里");
             //这里更新redis和token信息
-            String token= UUID.randomUUID().toString();
+            Long token= SnowAlgorithm.getid();
 
             Login_mid login_mid = loginMapper.query_message(userName);
-            String uuid = login_mid.getUuid();
-//            SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");//
-//            Calendar calendar = Calendar.getInstance();
-//            String nowdate = sdf.format(calendar.getTime());
-//            calendar.add(Calendar.MONTH, 1);
-//            String expdate = sdf.format(calendar.getTime());
+            Long uuid = login_mid.getUuid();
+
 
             try
             {

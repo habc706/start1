@@ -33,7 +33,7 @@ public class UserController {
     RestTemplate restTemplate;
 
     @GetMapping("/{uuid}")  //直接根据uuid获取
-    public Res query_user(@PathVariable("uuid") String uuid){
+    public Res query_user(@PathVariable("uuid") Long uuid){
 
         UserRes userRes = userMapper.query_user_info(uuid);
 
@@ -45,8 +45,8 @@ public class UserController {
     //用户可以更改的只有：1、昵称 2、图片 3、个性签名  ，除了图片需要特殊处理，其他的一样
 
     @PostMapping("/change_info")
-    public Res change_info(String token,String name,String personnality) throws ExpiraExcetion {
-        String uuid=redisUtils.getUuid(token);
+    public Res change_info(Long token,String name,String personnality) throws ExpiraExcetion {
+        Long uuid=redisUtils.getUuid(token);
         userMapper.change_user_info(uuid,name,personnality);
 
         return Res.ok();
@@ -55,9 +55,9 @@ public class UserController {
 
     @SneakyThrows
     @PostMapping("/change_icon")
-    public Res change_icon(MultipartFile file,String token){
+    public Res change_icon(MultipartFile file,Long token){
         MultiValueMap<String, Object> params = new LinkedMultiValueMap<>(1);
-        String uuid=redisUtils.getUuid(token);
+        Long uuid=redisUtils.getUuid(token);
 
         String  url="http://localhost:8002/eduoss/fileoss";
         Resource resource = new ByteArrayResource(file.getBytes()){ //file为接受的MultipartFile参数

@@ -17,7 +17,7 @@ public interface PostMapper {
     public List<Post> query_posts(@Param("offset") Integer offset,@Param("limit") Integer limit);
 
     @Select("select * from post where postid=#{postid}")
-    public Post query_post(String postid);
+    public Post query_post(Long postid);
 
     @Insert("insert into post (postid,owner,date,content,title) values (" +
             "#{postid},#{owner},#{date},#{content},#{title})")
@@ -27,11 +27,11 @@ public interface PostMapper {
     public Integer query_num();
 
     @Select("select * from post where owner=#{uuid}")
-    public List<Post> query_my_posts(String uuid);
+    public List<Post> query_my_posts(Long uuid);
 
     @Delete("delete from post where postid=#{postid}")
-    public Integer delete(@Param("postid") String postid);
+    public Integer delete(@Param("postid") Long postid);
 
     @Select("select owner from post where postid=#{postid}")
-    public String whos_post(String postid);
+    public Long whos_post(Long postid);
 }

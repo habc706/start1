@@ -37,17 +37,17 @@ public class Res   {
         return this;
     }
 
-    public HashMap<String, Object> getData() {
+    public HashMap<Object, Object> getData() {
         return data;
     }
 
-    public void setData(HashMap<String, Object> data) {
+    public void setData(HashMap<Object, Object> data) {
         this.data = data;
     }
 
     private String message;
 
-    private HashMap<String ,Object> data = new HashMap<>();
+    private HashMap<Object ,Object> data = new HashMap<>();
 
     private Res(){};
 
@@ -80,10 +80,12 @@ public class Res   {
         return this;
     }
 
-    public Res data(HashMap<String, Object> map){
+    public Res data(HashMap<Object, Object> map){
         this.data=map;
         return this;
     }
+
+
 
 
 }

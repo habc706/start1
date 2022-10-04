@@ -110,14 +110,14 @@ public class TestCon{
 
         //   redisTemplate.opsForValue().set("teas",se);
         String a=null;
-        Date date = userMapper.query_date("201e792d-28fb-4c2b-b1c3-4a80056465f7");
-        Date date1 = userMapper.query_date("408ae128-6464-4686-b1f5-2ab5344a506b");
-        if (date.compareTo(date1)<0){ //date更前面
-             a="yes";
-        }else {
-             a="no";
-        }
-        return Res.ok().data("if",date).data("date2",date1).data("yes/not",a);
+//        Date date = userMapper.query_date("201e792d-28fb-4c2b-b1c3-4a80056465f7");
+//        Date date1 = userMapper.query_date("408ae128-6464-4686-b1f5-2ab5344a506b");
+//        if (date.compareTo(date1)<0){ //date更前面
+//             a="yes";
+//        }else {
+//             a="no";
+//        }
+        return Res.ok();//.data("if",date).data("date2",date1).data("yes/not",a);
 
     }
 

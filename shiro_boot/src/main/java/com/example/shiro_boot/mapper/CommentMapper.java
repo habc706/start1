@@ -18,7 +18,7 @@ public interface CommentMapper {
     public Integer delete_comment(Comments comments);
 
     @Select("select content,owner,time from comments where id=#{postid}")
-    public List<CommentRes> query_comments(String postid);
+    public List<CommentRes> query_comments(Long postid);
 
 //    @Select("select owner from comments where id=#{postid}")
 //    public List<String > query_who_comment(String postid);
