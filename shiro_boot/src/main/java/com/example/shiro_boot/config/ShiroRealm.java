@@ -72,7 +72,7 @@ public class ShiroRealm extends AuthorizingRealm {
         if (MD5Utils.passwordIsTrue(pas,database_pass)){
             log.error("到了这里");
             //这里更新redis和token信息
-            Long token= SnowAlgorithm.getid();
+            String token= UUID.randomUUID().toString();
 
             Login_mid login_mid = loginMapper.query_message(userName);
             Long uuid = login_mid.getUuid();

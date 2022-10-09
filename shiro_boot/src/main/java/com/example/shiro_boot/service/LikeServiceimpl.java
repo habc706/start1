@@ -27,7 +27,7 @@ public class LikeServiceimpl  {
 
     //更改喜欢状态，如果没有就插入，有就更改
     @SneakyThrows
-    public Integer change_like(Long postid, Long token) {
+    public Integer change_like(Long postid, String token) {
 
         Long uuid=redisUtils.getUuid(token);
         Boolean b= likeMapper.quert_like(postid,uuid);

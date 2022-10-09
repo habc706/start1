@@ -174,6 +174,8 @@ public class Login {
     @PostMapping("/activate")
     public Res activate(String email,Integer active){
         Integer real_act = userMapper.query_active(email);
+        if (real_act==null)
+            return Res.fail().setMessage("邮箱未注册");
         if (real_act.compareTo(active)==0){
             userMapper.active(email);
 

@@ -6,6 +6,8 @@ import com.example.shiro_boot.mapper.TokenMapper;
 import com.example.shiro_boot.mapper.UserMapper;
 import com.example.shiro_boot.pojo.User;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.guo.res.Res;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.LinkedHashMap;
 //import static com.example.shiro_boot.utils.Mail.sendSimpleMail;
 
 
@@ -106,18 +109,21 @@ public class TestCon{
     }
 
     @GetMapping("/aea")
-    public Res dossss(){
+    public Res dossss() throws JsonProcessingException {
 
-        //   redisTemplate.opsForValue().set("teas",se);
-        String a=null;
-//        Date date = userMapper.query_date("201e792d-28fb-4c2b-b1c3-4a80056465f7");
-//        Date date1 = userMapper.query_date("408ae128-6464-4686-b1f5-2ab5344a506b");
-//        if (date.compareTo(date1)<0){ //date更前面
-//             a="yes";
-//        }else {
-//             a="no";
-//        }
-        return Res.ok();//.data("if",date).data("date2",date1).data("yes/not",a);
+
+        User user=new User();
+        user.setName("黄坚是sb");
+        user.setPersonality("我是shabi");
+        ObjectMapper objectMapper=new ObjectMapper();
+        String json=objectMapper.writeValueAsString(user);
+
+        redisTemplate.opsForValue().set("key:3",json);
+
+        String o = (String) redisTemplate.opsForValue().get("key:3");
+
+        User user1 = objectMapper.readValue(o, User.class);
+        return Res.ok().data("aa",user1);//.data("if",date).data("date2",date1).data("yes/not",a);
 
     }
 

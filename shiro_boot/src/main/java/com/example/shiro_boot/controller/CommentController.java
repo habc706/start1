@@ -30,14 +30,14 @@ public class CommentController {
 
     //增加评论，删除评论，查看所有评论，评论下面还有评论
     @PostMapping("give_coment")
-    public Res give_comment(Long postid,Long token,String content) throws ExpiraExcetion {
+    public Res give_comment(Long postid,String token,String content) throws ExpiraExcetion {
         Long uuid = redisUtils.getUuid(token);
         commentServiceimpl.add_comment(postid,uuid,content);
         return Res.ok();
     }
 
     @PostMapping("delete_comment")
-    public Res delete_comment(Long postid, Long token, String date) throws ParseException, ExpiraExcetion {
+    public Res delete_comment(Long postid, String token, String date) throws ParseException, ExpiraExcetion {
         SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         Date date2 = ft.parse(date);

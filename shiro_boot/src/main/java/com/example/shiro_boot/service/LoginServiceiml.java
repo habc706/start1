@@ -13,6 +13,7 @@ import com.example.shiro_boot.pojo.vo.UserRes;
 import com.example.shiro_boot.utils.MD5Utils;
 import com.example.shiro_boot.utils.RedisUtils;
 import com.example.shiro_boot.utils.SnowAlgorithm;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -84,7 +85,8 @@ public class LoginServiceiml  {
 
 
 //注册成功返回yes
-    public boolean register(String email,String name,String password) {
+    @SneakyThrows
+    public boolean register(String email, String name, String password) {
         String pass=loginMapper.query_passwd(email);
 
         if (pass!=null)
@@ -92,7 +94,8 @@ public class LoginServiceiml  {
 
         TransactionStatus transactionStatus = dataSourceTransactionManager.getTransaction(transactionDefinition);
 
-        Long token = SnowAlgorithm.getid();
+        String  token = UUID.randomUUID().toString();
+
 
         Long uuid = SnowAlgorithm.getid();
 
@@ -135,6 +138,7 @@ public class LoginServiceiml  {
             dataSourceTransactionManager.rollback(transactionStatus);
             throw e;
         }catch (RedisConnectionFailureException redisConnectionException){
+
             log.error("新增用户时redis出错:" + redisConnectionException.getMessage());
             dataSourceTransactionManager.commit(transactionStatus);//提交
             return true;

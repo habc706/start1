@@ -30,7 +30,7 @@ public class PostControler {
     }
 
     @PostMapping("/write")
-    public Res write_post(Long token,String content,String title) throws ExpiraExcetion {
+    public Res write_post(String token,String content,String title) throws ExpiraExcetion {
 
         Long uuid=redisUtils.getUuid(token);
         int a= postServiceimpl.write_post(uuid,content,title);
@@ -66,7 +66,7 @@ public class PostControler {
     }
 
     @PostMapping("/delete")
-    public Res delete(Long postid,Long token) throws ExpiraExcetion {
+    public Res delete(Long postid,String token) throws ExpiraExcetion {
         Long uuid=redisUtils.getUuid(token);
         Long real_user=postMapper.whos_post(postid);
         if (!uuid.equals(real_user))

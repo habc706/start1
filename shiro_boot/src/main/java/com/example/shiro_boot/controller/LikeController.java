@@ -29,7 +29,7 @@ public class LikeController {
     }
 
     @PostMapping("/change_like")
-    public Res change_like(Long postid,Long token){
+    public Res change_like(Long postid,String token){
 
         likeServiceimpl.change_like(postid,token);
         return Res.ok();

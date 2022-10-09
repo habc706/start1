@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Data
 public class Token {
-    private Long token;
+    private String token;
     private Long uuid;
 
     private Date add_time;

@@ -22,5 +22,5 @@ public interface TokenMapper {
     public String query_token(Long  uuid);
 
     @Select("select uuid from token where token=#{token}")
-    public Long query_uuid(Long  token);
+    public Long query_uuid(String  token);
 }

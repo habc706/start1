@@ -45,7 +45,7 @@ public class UserController {
     //用户可以更改的只有：1、昵称 2、图片 3、个性签名  ，除了图片需要特殊处理，其他的一样
 
     @PostMapping("/change_info")
-    public Res change_info(Long token,String name,String personnality) throws ExpiraExcetion {
+    public Res change_info(String token,String name,String personnality) throws ExpiraExcetion {
         Long uuid=redisUtils.getUuid(token);
         userMapper.change_user_info(uuid,name,personnality);
 
@@ -55,7 +55,7 @@ public class UserController {
 
     @SneakyThrows
     @PostMapping("/change_icon")
-    public Res change_icon(MultipartFile file,Long token){
+    public Res change_icon(MultipartFile file,String token){
         MultiValueMap<String, Object> params = new LinkedMultiValueMap<>(1);
         Long uuid=redisUtils.getUuid(token);
 

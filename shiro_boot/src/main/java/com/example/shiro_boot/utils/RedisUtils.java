@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
         @Autowired
         TokenMapper tokenMapper;
 
-        public Long getUuid(Long token) throws ExpiraExcetion {
+        public Long getUuid(String token) throws ExpiraExcetion {
 
             try {
                 Long res= (Long) redisTemplate.opsForValue().get(token);
@@ -48,7 +48,7 @@ import java.util.concurrent.TimeUnit;
 
         }
 
-        public void setToken(Long  token,Long uuid){
+        public void setToken(String  token,Long uuid){
 
             redisTemplate.opsForValue().set(token,uuid,48,TimeUnit.HOURS);
         }
