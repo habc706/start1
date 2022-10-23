@@ -3,11 +3,14 @@ package com.example.shiro_boot.service;
 import com.example.shiro_boot.mapper.PostMapper;
 import com.example.shiro_boot.pojo.Post;
 
+import com.example.shiro_boot.utils.RedisConstents;
 import com.example.shiro_boot.utils.SnowAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +18,9 @@ import java.util.List;
 public class PostServiceimpl  {
     @Autowired
     private PostMapper postMapper;
+
+    @Resource
+    private RedisTemplate redisTemplate;
 
 
     public List<Post> get_posts(Integer offset, Integer limit) {
@@ -39,7 +45,17 @@ public class PostServiceimpl  {
         Long postid= SnowAlgorithm.getid();
         post.setPostid(postid);
         Integer res =postMapper.add_post(post);
+        List<Long> fans = postMapper.query_my_fans(uuid);
+        if (fans==null||fans.isEmpty()){
+            return res;
+        }
+        for (Long fan_id:fans
+             ) {
+            String key= RedisConstents.FOLLOW+fan_id;
+            redisTemplate.opsForZSet().add(key,String.valueOf(postid),System.currentTimeMillis());
+        }
 
-        return res;
+        return 1;
+
     }
 }

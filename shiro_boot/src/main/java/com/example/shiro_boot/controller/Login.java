@@ -9,6 +9,7 @@ import com.example.shiro_boot.pojo.vo.LoginRes;
 import com.example.shiro_boot.pojo.vo.Logvo;
 import com.example.shiro_boot.service.LoginServiceiml;
 import com.example.shiro_boot.utils.Mail;
+import com.example.shiro_boot.utils.RedisConstents;
 import com.guo.res.Res;
 import com.guo.res.ResCode;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @Slf4j
@@ -36,8 +40,6 @@ public class Login {
     @Autowired
     LoginServiceiml loginService;
 
-    @Autowired
-    RedisTemplate redisTemplate;
 
     @Autowired
     private Mail mail; //发邮箱
@@ -50,6 +52,9 @@ public class Login {
 
     @Autowired
     private TokenMapper tokenMapper;
+    @Resource
+    RedisTemplate redisTemplate;
+
 
 
 //登陆并返回token
@@ -66,8 +71,7 @@ public class Login {
         if(loginMapper.query_message(logvo.getEmail())==null){
             return Res.fail().setMessage("邮箱不存在");  //返回空值就是用户名不存在
         }
-        if(!userMapper.if_active(logvo.getEmail()))
-            return Res.fail().code(ResCode.EMAIL_NOT_ACTIVE).setMessage("邮箱没有激活");
+
 
         try {
             subject.login(token);
@@ -95,9 +99,9 @@ public class Login {
         HashMap<Object ,Object> hashMap=new HashMap<>();
         hashMap.put("name",jud.getName());
         hashMap.put("uuid",jud.getUuid());
-        hashMap.put("token",jud.getToken());
         hashMap.put("icon",jud.getIcon_url());
         hashMap.put("personality",jud.getPersonality());
+        hashMap.put("token",jud.getToken());
 
 
         return Res.ok().data(hashMap);
@@ -114,13 +118,12 @@ public class Login {
 
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(logvo.getEmail(), logvo.getPasswd());
-        token.setRememberMe(true);
+//        token.setRememberMe(true);
 
         if(loginMapper.query_message(logvo.getEmail())==null){
             return Res.fail().setMessage("邮箱不存在");  //返回空值就是用户名不存在
         }
-        if(!userMapper.if_active(logvo.getEmail()))
-            return Res.fail().code(ResCode.EMAIL_NOT_ACTIVE).setMessage("邮箱没有激活");
+
 
         try {
             subject.login(token);
@@ -147,7 +150,6 @@ public class Login {
         HashMap<Object ,Object> hashMap=new HashMap<>();
         hashMap.put("name",jud.getName());
         hashMap.put("uuid",jud.getUuid());
-        hashMap.put("token",jud.getToken());
         hashMap.put("icon",jud.getIcon_url());
         hashMap.put("personality",jud.getPersonality());
 
@@ -155,34 +157,33 @@ public class Login {
     }
 
 
+    //分开一个sendcode和注册
     @PostMapping("/register")  //注册成功后返回成功
-    public Res register(String email,String name,String password){
+    public Res register(String email,String password,String active_code){
 
-        //1.查看是否包含相同的邮箱，如果有
-        if (loginService.register(email,name,password)){
-            //发邮箱，写注册码
-            int code= userMapper.query_active(email);
-            mail.sendMail(email,"您的hktalk验证码","您的验证码是："+code);
-            return Res.ok().setMessage("注册成功，请查看邮箱验证码激活");
+        String code= (String) redisTemplate.opsForValue().get(RedisConstents.VERTIFY+email);
+        if (!code.equals(active_code)){
+            return Res.fail().setMessage("验证码不正确");
         }
 
-
-        return Res.fail().setMessage("该邮箱已注册").code(202);
+        //1.查看是否包含相同的邮箱，如果有
+       return loginService.register(email,password);
 
     }
 
-    @PostMapping("/activate")
-    public Res activate(String email,Integer active){
-        Integer real_act = userMapper.query_active(email);
-        if (real_act==null)
-            return Res.fail().setMessage("邮箱未注册");
-        if (real_act.compareTo(active)==0){
-            userMapper.active(email);
+    //这里发送
+    @PostMapping("/sendcode")
+    public Res activate(String email){
+        int min=1000;
+        Random random = new Random();//9000
+        int active_code =  (random.nextInt(8998) + min + 1);
 
-            return Res.ok().setMessage("激活成功");
-        }
+        redisTemplate.opsForValue().set(RedisConstents.VERTIFY+email,active_code+"");
+        redisTemplate.expire(RedisConstents.VERTIFY+email,5L, TimeUnit.MINUTES);
 
-        return Res.fail().setMessage("验证码不正确");
+        mail.sendMail(email,"您的hktalk验证码","您的验证码是："+active_code+"。5分钟后验证码过期");
+        return Res.ok().setMessage("注册成功，请查看邮箱验证码激活，验证码时间有效期为5分钟，请注意");
+
     }
 
 

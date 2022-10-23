@@ -13,8 +13,8 @@ import java.util.Date;
 public interface
 UserMapper {
 
-    @Insert("insert into user (uuid,name,password,email,active_code,create_date) values (" +
-            "#{uuid},#{name},#{password},#{email},#{active_code},#{create_date})")
+    @Insert("insert into user (uuid,name,password,email,create_date) values (" +
+            "#{uuid},#{name},#{password},#{email},#{create_date})")
     public int add_user(User user);
 
     //更新操作

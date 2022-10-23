@@ -76,8 +76,6 @@ public class ShiroRealm extends AuthorizingRealm {
 
             Login_mid login_mid = loginMapper.query_message(userName);
             Long uuid = login_mid.getUuid();
-
-
             try
             {
                 redisUtils.setToken(token,uuid);
@@ -86,8 +84,7 @@ public class ShiroRealm extends AuthorizingRealm {
                 return new SimpleAuthenticationInfo("",pas,"");
 
             }
-
-
+            //
 
             return new SimpleAuthenticationInfo("",pas,"");
         }

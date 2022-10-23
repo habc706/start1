@@ -42,8 +42,8 @@ public class PostControler {
 
     //查看某一篇具体信息，标题
     @GetMapping("get/{id}")
-    public Res get_a_post(@PathVariable("id") Long id){
-        Post post = postServiceimpl.get_post(id);
+    public Res get_a_post(@PathVariable("id") String id){
+        Post post = postServiceimpl.get_post(Long.valueOf(id));
 
         return Res.ok().data("post",post);
     }
@@ -60,9 +60,9 @@ public class PostControler {
 
 
     @PostMapping("/my_posts")
-    public Res my_post(Long  uuid) {
+    public Res my_post(String  uuid) {
 
-        return Res.ok().data("posts",postMapper.query_my_posts(uuid));
+        return Res.ok().data("posts",postMapper.query_my_posts(Long.valueOf(uuid)));
     }
 
     @PostMapping("/delete")

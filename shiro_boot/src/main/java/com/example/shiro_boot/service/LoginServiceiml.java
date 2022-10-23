@@ -1,5 +1,7 @@
 package com.example.shiro_boot.service;
 
+import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import com.example.shiro_boot.mapper.LoginMapper;
 import com.example.shiro_boot.mapper.TokenMapper;
 import com.example.shiro_boot.mapper.UserMapper;
@@ -11,8 +13,10 @@ import com.example.shiro_boot.pojo.vo.Logvo;
 
 import com.example.shiro_boot.pojo.vo.UserRes;
 import com.example.shiro_boot.utils.MD5Utils;
+import com.example.shiro_boot.utils.RedisConstents;
 import com.example.shiro_boot.utils.RedisUtils;
 import com.example.shiro_boot.utils.SnowAlgorithm;
+import com.guo.res.Res;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +31,12 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.print.DocFlavor;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import javax.annotation.Resource;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -44,7 +46,7 @@ public class LoginServiceiml  {
     @Autowired
     LoginMapper loginMapper;
 
-    @Autowired
+    @Resource
     TokenMapper tokenMapper;
     @Autowired
     DataSourceTransactionManager dataSourceTransactionManager;
@@ -59,6 +61,9 @@ public class LoginServiceiml  {
     @Autowired
     RedisUtils redisUtils;
 
+    @Resource
+    RedisTemplate redisTemplate;
+
 
 
     //认证成功，返回信息
@@ -69,11 +74,12 @@ public class LoginServiceiml  {
             String  s = tokenMapper.query_token(login_mid.getUuid());
             LoginRes loginRes=new LoginRes();
             loginRes.setName(login_mid.getName());
-            loginRes.setToken(s);
+            //loginRes.setToken(s);
             loginRes.setUuid(login_mid.getUuid());
         UserRes userRes= userMapper.query_user_info(login_mid.getUuid());
         loginRes.setPersonality(userRes.getPersonality());
         loginRes.setIcon_url(userRes.getIcon_url());
+        loginRes.setToken(s);
             //更新token日期或更新token
 
         return loginRes;
@@ -86,22 +92,16 @@ public class LoginServiceiml  {
 
 //注册成功返回yes
     @SneakyThrows
-    public boolean register(String email, String name, String password) {
+    public Res register(String email, String password) {
         String pass=loginMapper.query_passwd(email);
 
         if (pass!=null)
-            return false;
+            return Res.fail().setMessage("用户已存在");
 
         TransactionStatus transactionStatus = dataSourceTransactionManager.getTransaction(transactionDefinition);
 
         String  token = UUID.randomUUID().toString();
-
-
         Long uuid = SnowAlgorithm.getid();
-
-        int min=1000;
-        Random random = new Random();//9000
-        int active =  (random.nextInt(8998) + min + 1);
 
         try {
             //开启事务
@@ -121,9 +121,10 @@ public class LoginServiceiml  {
             String encryption_pass=MD5Utils.string2MD5(password);
             //添加到用户表  uuid,name,encryption_pass,email,active
 
+            //生成随机用户名
             User user=new User();
-            user.setName(name);user.setUuid(uuid);user.setPassword(encryption_pass);user.setEmail(email);
-            user.setCreate_date(new Date());user.setActive_code(active);
+            user.setName("user_"+RandomUtil.randomString(6));user.setUuid(uuid);user.setPassword(encryption_pass);user.setEmail(email);
+            user.setCreate_date(new Date());
             userMapper.add_user(user);
 
 
@@ -132,7 +133,7 @@ public class LoginServiceiml  {
 
             //事务提交
             dataSourceTransactionManager.commit(transactionStatus);//提交
-            return true;
+            return Res.ok().setMessage("注册成功");
         } catch (DuplicateKeyException e) {
             log.error("新增用户时重复主键:" + e.getMessage());
             dataSourceTransactionManager.rollback(transactionStatus);
@@ -141,7 +142,7 @@ public class LoginServiceiml  {
 
             log.error("新增用户时redis出错:" + redisConnectionException.getMessage());
             dataSourceTransactionManager.commit(transactionStatus);//提交
-            return true;
+            return Res.ok().setMessage("注册成功");
         }catch (Exception e){
             log.error("新增用户时出现意外异常:" + e.getMessage()+"异常类型" +   e.getClass());
             dataSourceTransactionManager.rollback(transactionStatus);
@@ -149,7 +150,6 @@ public class LoginServiceiml  {
         }
 
     }
-
 
 
 }

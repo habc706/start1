@@ -20,16 +20,9 @@ public class LikeController {
     @Autowired
     private LikeServiceimpl likeServiceimpl;
     //返回点赞量、收藏量、点赞用户信息
-    @PostMapping("/details/{postid}")
-    public Res like_nums(@PathVariable("postid") Long postid){
-        int num=likeServiceimpl.likenums(postid);
-
-
-        return Res.ok().data("nums",num);
-    }
 
     @PostMapping("/change_like")
-    public Res change_like(Long postid,String token){
+    public Res change_like(String postid,String token){
 
         likeServiceimpl.change_like(postid,token);
         return Res.ok();

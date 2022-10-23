@@ -33,9 +33,9 @@ public class UserController {
     RestTemplate restTemplate;
 
     @GetMapping("/{uuid}")  //直接根据uuid获取
-    public Res query_user(@PathVariable("uuid") Long uuid){
+    public Res query_user(@PathVariable("uuid") String uuid){
 
-        UserRes userRes = userMapper.query_user_info(uuid);
+        UserRes userRes = userMapper.query_user_info(Long.valueOf(uuid));
 
         return Res.ok().data("name",userRes.getName()).data("icon",userRes.getIcon_url())
                 .data("personality",userRes.getPersonality());

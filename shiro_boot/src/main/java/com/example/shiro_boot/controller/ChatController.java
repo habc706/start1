@@ -31,11 +31,11 @@ public class ChatController {
     }
 
     @PostMapping("/add_chat")
-    public Res add_chat(Long uuid,String token,String content) throws ExpiraExcetion {  //uuid是对方的uuid
+    public Res add_chat(String  uuid,String token,String content) throws ExpiraExcetion {  //uuid是对方的uuid
         Long myid=redisUtilsl.getUuid(token);
         //生成id
         Date date=userMapper.query_date(myid);
-        Date date1=userMapper.query_date(uuid);
+        Date date1=userMapper.query_date(Long.valueOf(uuid));
         String id=null;
         String myStringid=String.valueOf(myid);
         String yourStringid=String.valueOf(uuid);
@@ -50,10 +50,10 @@ public class ChatController {
         return Res.ok();
     }
     @PostMapping("/get_chats")
-    public Res get_chats(Long uuid,String token) throws ExpiraExcetion {
+    public Res get_chats(String uuid,String token) throws ExpiraExcetion {
         Long myid=redisUtilsl.getUuid(token);
         Date date=userMapper.query_date(myid);
-        Date date1=userMapper.query_date(uuid);
+        Date date1=userMapper.query_date(Long.valueOf(uuid));
         String myStringid=String.valueOf(myid);
         String yourStringid=String.valueOf(uuid);
         String id=null;

@@ -1,7 +1,5 @@
 package com.example.shiro_boot.controller;
 
-import com.example.shiro_boot.Excepiton.MyGlobalException;
-import com.example.shiro_boot.mapper.LikeMapper;
 import com.example.shiro_boot.mapper.TokenMapper;
 import com.example.shiro_boot.mapper.UserMapper;
 import com.example.shiro_boot.pojo.User;
@@ -23,8 +21,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.LinkedHashMap;
 //import static com.example.shiro_boot.utils.Mail.sendSimpleMail;
 
 
@@ -44,8 +40,7 @@ public class TestCon{
     @Autowired
     UserMapper userMapper;
 
-    @Autowired
-    LikeMapper likeMapper;
+
 
 
     @PostMapping("/t") public Res tea( String user){

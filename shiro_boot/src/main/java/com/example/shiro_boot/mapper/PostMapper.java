@@ -34,4 +34,8 @@ public interface PostMapper {
 
     @Select("select owner from post where postid=#{postid}")
     public Long whos_post(Long postid);
+
+    @Select("select fllow_user_id from `fllow` where `user_id`=#{myid}")
+    public List<Long> query_my_fans(Long myid);
+
 }
